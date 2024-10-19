@@ -1,115 +1,121 @@
-import Image from "next/image";
-import localFont from "next/font/local";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+// import localFont from "next/font/local";
+import Navbar from "../components/Navbar";
+import Tasks from "../components/Tasks";
+import Tiles from "../components/Tiles";
+import { Store } from "../redux/store";
+import { Provider } from "react-redux";
 
-export default function Home() {
+
+export default function Home({tasks}) {
   return (
-    <div
-      className={`${geistSans.variable} ${geistMono.variable} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
-    >
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              pages/index.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <Provider store={Store}>
+    <div className="min-h-screen sm:pb-20 mx-auto max-w-6xl text-black">
+      <main className="grid py-4 px-4 gap-8">
+        <p className="text-center sm:text-start text-3xl sm:text-lg font-bold border-b-2 py-4">
+          📃 Task Manager
+        </p>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+        <div className="w-full">
+          <Tiles />
+        </div>
+
+        <div className="grid gap-2">
+          <Navbar />
+
+          <div className="w-full">
+            <Tasks serverData={tasks}/>
+          </div>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
+  </Provider>
   );
+}
+
+export async function getServerSideProps() {
+  const tasks = [
+    {
+      id: 1,
+      title: "Design Homepage Layout",
+      description:
+        "Create a responsive layout for the homepage with a focus on UX design.",
+      priority: 1,
+      isCompleted: false,
+    },
+    {
+      id: 2,
+      title: "Fix Login Issue",
+      description:
+        "Resolve the bug where users are unable to log in with their credentials.",
+      priority: 2,
+      isCompleted: false,
+    },
+    {
+      id: 3,
+      title: "Write Unit Tests for User Module",
+      description:
+        "Write unit tests to cover all core functionalities in the user module.",
+      priority: 3,
+      isCompleted: true,
+    },
+    {
+      id: 4,
+      title: "Implement Payment Gateway",
+      description:
+        "Integrate Stripe payment gateway for subscription services.",
+      priority: 1,
+      isCompleted: true,
+    },
+    {
+      id: 5,
+      title: "Update Product Descriptions",
+      description:
+        "Revise product descriptions in the database to reflect the new offerings.",
+      priority: 3,
+      isCompleted: true,
+    },
+    {
+      id: 6,
+      title: "Refactor Dashboard Component",
+      description:
+        "Refactor the dashboard code for better readability and performance.",
+      priority: 2,
+      isCompleted: false,
+    },
+    {
+      id: 7,
+      title: "Set Up Email Notifications",
+      description:
+        "Configure and deploy email notification service for customer updates.",
+      priority: 1,
+      isCompleted: false,
+    },
+    {
+      id: 8,
+      title: "Optimize Database Queries",
+      description:
+        "Improve query performance in the reporting module to speed up data retrieval.",
+      priority: 2,
+      isCompleted: false,
+    },
+    {
+      id: 9,
+      title: "Prepare Marketing Campaign",
+      description:
+        "Collaborate with the marketing team to create materials for the new product launch.",
+      priority: 3,
+      isCompleted: false,
+    },
+    {
+      id: 10,
+      title: "Implement Dark Mode",
+      description:
+        "Add a dark mode option to the application for improved accessibility.",
+      priority: 2,
+      isCompleted: false,
+    },
+  ];
+
+  return { props: { tasks } };
 }
