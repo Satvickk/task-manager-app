@@ -39,9 +39,10 @@ To run this project locally, follow these steps:
 
 The tasks are stored in an array and can be sorted based on their priority using a simple data structure. The priority is represented as a numeric value where:
 
-**High priority: 1**
-**Medium priority: 2**
-**Low priority: 3**
+**High priority: 1**.
+**Medium priority: 2**.
+**Low priority: 3**.
+
 When displaying the tasks, the application sorts the tasks array by the priority value in ascending order (i.e., high priority first). This is achieved using the **.sort()** method in JavaScript, which takes a comparison function to determine the order. The completed tasks are then displayed at the bottom of the list to clearly distinguish between pending and completed tasks.
 
 
